@@ -9,12 +9,12 @@ import (
 )
 
 
-func readLines(file *os.File, s chan string) {
+func readLines(file *os.File, lines chan string) {
     var scanner *bufio.Scanner = bufio.NewScanner(file)
     for scanner.Scan() {
-        s <- scanner.Text()
+        lines <- scanner.Text()
     }
-    close(s)
+    close(lines)
 
     if err := scanner.Err(); err != nil {
         log.Fatal(err)
@@ -26,10 +26,10 @@ func extractNumber(line string) int {
     var first_number, second_number int = -1, 0
     for _, char := range(line) {
         if '0' <= char && char <= '9' {
-            second_number = int(char - '0')
             if first_number == -1 {
                 first_number = second_number
             }
+            second_number = int(char - '0')
         }
     }
     return first_number * 10 + second_number
@@ -53,11 +53,11 @@ func main() {
     }
     defer file.Close()
 
-    var s chan string = make(chan string, 5)
-    go readLines(file, s)
+    var lines_channel chan string = make(chan string, 5)
+    go readLines(file, lines_channel)
 
     var result int = 0
-    for line := range s {
+    for line := range lines_channel {
         result += extractNumber(line)
     }
 
