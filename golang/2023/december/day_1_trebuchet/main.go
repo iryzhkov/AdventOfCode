@@ -59,7 +59,7 @@ func extractNumberPart1(line string) int {
 func extractNumberPart2(line string, root_node *trieNode) int {
 	const unset int = -1
 	var first_digit, second_digit, temp_digit int = unset, 0, unset
-	var curr_nodes, temp_nodes *[]trieNode = &[]trieNode{*root_node}, nil
+	var curr_nodes, next_nodes *[]*trieNode = &[]*trieNode{root_node}, &[]*trieNode{}
 	var next_node *trieNode
 
 	for _, char := range line {
@@ -68,27 +68,26 @@ func extractNumberPart2(line string, root_node *trieNode) int {
 		if '0' <= char && char <= '9' {
 
 			temp_digit = int(char - '0')
-			curr_nodes = &[]trieNode{*root_node}
+
+			*curr_nodes = nil
+			*curr_nodes = append(*curr_nodes, root_node)
 
 		} else if 'a' <= char && char <= 'z' {
 
-			temp_nodes = &[]trieNode{*root_node}
+			*next_nodes = nil
+			*next_nodes = append(*next_nodes, root_node)
 
 			for _, node := range *curr_nodes {
 				next_node = node.children[char]
 				if next_node != nil {
-					*temp_nodes = append(*temp_nodes, *next_node)
-					if (*next_node).value != unset {
-						temp_digit = (*next_node).value
+					*next_nodes = append(*next_nodes, next_node)
+					if next_node.value != unset {
+						temp_digit = next_node.value
 					}
 				}
 			}
 
-			curr_nodes = temp_nodes
-
-		} else {
-
-			curr_nodes = &[]trieNode{*root_node}
+			curr_nodes, next_nodes = next_nodes, curr_nodes
 
 		}
 
