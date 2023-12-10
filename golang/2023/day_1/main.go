@@ -44,30 +44,30 @@ func readLines(filename *string, lines chan string) {
 }
 
 func extractNumberPart1(line string) int {
-	var first_number, second_number int = -1, 0
+	var first_digit, second_digit int = -1, 0
 	for _, char := range line {
 		if '0' <= char && char <= '9' {
-			second_number = int(char - '0')
-			if first_number == -1 {
-				first_number = second_number
+			second_digit = int(char - '0')
+			if first_digit == -1 {
+				first_digit = second_digit
 			}
 		}
 	}
-	return first_number*10 + second_number
+	return first_digit*10 + second_digit
 }
 
 func extractNumberPart2(line string, root_node *trieNode) int {
 	const unset int = -1
-	var first_number, second_number, temp_number int = unset, 0, unset
+	var first_digit, second_digit, temp_digit int = unset, 0, unset
 	var curr_nodes, temp_nodes *[]trieNode = &[]trieNode{*root_node}, nil
 	var next_node *trieNode
 
 	for _, char := range line {
-		temp_number = unset
+		temp_digit = unset
 
 		if '0' <= char && char <= '9' {
 
-			temp_number = int(char - '0')
+			temp_digit = int(char - '0')
 			curr_nodes = &[]trieNode{*root_node}
 
 		} else if 'a' <= char && char <= 'z' {
@@ -79,7 +79,7 @@ func extractNumberPart2(line string, root_node *trieNode) int {
 				if next_node != nil {
 					*temp_nodes = append(*temp_nodes, *next_node)
 					if (*next_node).value != unset {
-						temp_number = (*next_node).value
+						temp_digit = (*next_node).value
 					}
 				}
 			}
@@ -92,14 +92,14 @@ func extractNumberPart2(line string, root_node *trieNode) int {
 
 		}
 
-		if temp_number != unset {
-			second_number = temp_number
-			if first_number == unset {
-				first_number = second_number
+		if temp_digit != unset {
+			second_digit = temp_digit
+			if first_digit == unset {
+				first_digit = second_digit
 			}
 		}
 	}
-	return first_number*10 + second_number
+	return first_digit*10 + second_digit
 }
 
 func getFilename() string {
