@@ -1,0 +1,2 @@
+Part 1 result: 2632
+Part 2 result: 69629
