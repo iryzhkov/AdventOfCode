@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -109,7 +108,7 @@ func getFilename() string {
 	case 2:
 		filename = os.Args[1]
 	default:
-		panic(errors.New("Only accept 1 or 2 arguments"))
+		panic("Only accept 1 or 2 arguments")
 	}
 	return filename
 }
